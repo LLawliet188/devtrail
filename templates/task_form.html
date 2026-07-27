@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="detail narrow">
+  <h1>{{ 'Edit task' if task else 'New task' }}</h1>
+  <form method="post" class="stacked">
+    <label>Title
+      <input name="title" required value="{{ task.title if task else '' }}">
+    </label>
+    <label>Notes
+      <textarea name="notes" rows="4">{{ task.notes if task else '' }}</textarea>
+    </label>
+    <label>Context
+      <select name="context_id">
+        <option value="">(none)</option>
+        {% for c in contexts %}
+        <option value="{{ c.id }}" {% if task and task.context_id == c.id %}selected{% endif %}>
+          {{ c.name }} ({{ c.kind }})
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Priority
+      <select name="priority">
+        {% for p, label in [(1, 'high'), (2, 'normal'), (3, 'low')] %}
+        <option value="{{ p }}" {% if task and task.priority == p %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Due date
+      <input type="date" name="due_date" value="{{ task.due_date if task and task.due_date else '' }}">
+    </label>
+    <button class="btn">Save</button>
+  </form>
+</article>
+{% endblock %}

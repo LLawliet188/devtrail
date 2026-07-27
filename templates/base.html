@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DevTrail</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="{{ url_for('board') }}">Dev<span>Trail</span></a>
+    <nav>
+      <a href="{{ url_for('board') }}">Board</a>
+      <a href="{{ url_for('review') }}">Review</a>
+      <a href="{{ url_for('contexts_view') }}">Contexts</a>
+      <a class="btn" href="{{ url_for('new_task') }}">+ New task</a>
+    </nav>
+  </header>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash">{{ messages[0] }}</div>
+    {% endif %}
+  {% endwith %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

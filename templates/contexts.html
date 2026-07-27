@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="detail narrow">
+  <h1>Contexts</h1>
+  <p class="hint">A context is a project or an IU course that tasks belong to.</p>
+
+  <table class="ctx-table">
+    <tr><th>Name</th><th>Kind</th><th>Tasks</th></tr>
+    {% for c in contexts %}
+    <tr>
+      <td><span class="ctx-tag" style="background: {{ c.color }}">{{ c.name }}</span></td>
+      <td>{{ c.kind }}</td>
+      <td>{{ c.task_count }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Add context</h2>
+  <form method="post" class="stacked">
+    <label>Name <input name="name" required></label>
+    <label>Kind
+      <select name="kind">
+        <option value="project">project</option>
+        <option value="course">course</option>
+      </select>
+    </label>
+    <label>Color <input type="color" name="color" value="#4a6fa5"></label>
+    <button class="btn">Add</button>
+  </form>
+</article>
+{% endblock %}

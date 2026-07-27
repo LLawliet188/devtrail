@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="detail narrow">
+  <h1>Pause: {{ task.title }}</h1>
+  <p class="hint">Write down just enough that future-you can pick this up without re-reading everything.</p>
+  <form method="post" class="stacked">
+    <label>Git branch
+      <input name="branch" placeholder="e.g. feature/trip-search">
+    </label>
+    <label>Open files
+      <input name="open_files" placeholder="e.g. app/search/page.tsx, lib/api.ts">
+    </label>
+    <label>Last commands
+      <input name="last_commands" placeholder="e.g. npm run dev, npx prisma migrate dev">
+    </label>
+    <label>Next step (the important one)
+      <textarea name="next_step" rows="3" placeholder="What exactly were you about to do?"></textarea>
+    </label>
+    <button class="btn">Save snapshot &amp; pause</button>
+  </form>
+</article>
+{% endblock %}

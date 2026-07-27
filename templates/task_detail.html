@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="detail">
+  <div class="detail-head">
+    <h1>{{ task.title }}</h1>
+    <span class="status-badge st-{{ task.status }}">{{ task.status }}</span>
+  </div>
+
+  <p class="meta-line">
+    {% if task.ctx_name %}<span class="ctx-tag" style="background: {{ task.ctx_color }}">{{ task.ctx_name }}</span>{% endif %}
+    priority {{ task.priority }}
+    {% if task.due_date %} &middot; due {{ task.due_date }}{% endif %}
+    &middot; last touched {{ task.updated_at }}
+  </p>
+
+  {% if task.notes %}<p class="notes">{{ task.notes }}</p>{% endif %}
+
+  <div class="actions">
+    {% if task.status != 'active' %}
+    <form method="post" action="{{ url_for('change_status', task_id=task.id) }}">
+      <input type="hidden" name="status" value="active">
+      <button class="btn small">Start / resume</button>
+    </form>
+    {% endif %}
+    {% if task.status == 'active' %}
+    <a class="btn small alt" href="{{ url_for('pause_task', task_id=task.id) }}">Pause with snapshot</a>
+    {% endif %}
+    {% if task.status != 'done' %}
+    <form method="post" action="{{ url_for('change_status', task_id=task.id) }}">
+      <input type="hidden" name="status" value="done">
+      <button class="btn small alt">Mark done</button>
+    </form>
+    {% endif %}
+    <a class="btn small alt" href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+    <form method="post" action="{{ url_for('delete_task', task_id=task.id) }}"
+          onsubmit="return confirm('Delete this task?')">
+      <button class="btn small danger">Delete</button>
+    </form>
+  </div>
+
+  <h2>Context snapshots</h2>
+  {% for s in snapshots %}
+  <div class="snapshot">
+    <div class="snap-date">{{ s.created_at }}</div>
+    <dl>
+      {% if s.branch %}<dt>Branch</dt><dd><code>{{ s.branch }}</code></dd>{% endif %}
+      {% if s.open_files %}<dt>Open files</dt><dd><code>{{ s.open_files }}</code></dd>{% endif %}
+      {% if s.last_commands %}<dt>Last commands</dt><dd><code>{{ s.last_commands }}</code></dd>{% endif %}
+      {% if s.next_step %}<dt>Next step</dt><dd>{{ s.next_step }}</dd>{% endif %}
+    </dl>
+  </div>
+  {% else %}
+  <p class="empty">No snapshots yet. Pause the task while it is active to create one.</p>
+  {% endfor %}
+</article>
+{% endblock %}

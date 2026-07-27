@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if resume %}
+<section class="resume-card">
+  <div class="resume-head">Pick up where you left off</div>
+  <a class="resume-title" href="{{ url_for('task_detail', task_id=resume.id) }}">{{ resume.title }}</a>
+  {% if resume_snap %}
+  <dl>
+    {% if resume_snap.branch %}<dt>Branch</dt><dd><code>{{ resume_snap.branch }}</code></dd>{% endif %}
+    {% if resume_snap.open_files %}<dt>Files</dt><dd><code>{{ resume_snap.open_files }}</code></dd>{% endif %}
+    {% if resume_snap.next_step %}<dt>Next step</dt><dd>{{ resume_snap.next_step }}</dd>{% endif %}
+  </dl>
+  {% endif %}
+  <form method="post" action="{{ url_for('change_status', task_id=resume.id) }}">
+    <input type="hidden" name="status" value="active">
+    <button class="btn small">Resume task</button>
+  </form>
+</section>
+{% endif %}
+
+<div class="board-meta">
+  <form method="get" class="ctx-filter">
+    <select name="context" onchange="this.form.submit()">
+      <option value="">All contexts</option>
+      {% for c in contexts %}
+        <option value="{{ c.id }}" {% if ctx_filter == c.id %}selected{% endif %}>
+          {{ c.name }} ({{ c.kind }})
+        </option>
+      {% endfor %}
+    </select>
+  </form>
+  <div class="wip {% if active_count >= wip_limit %}over{% endif %}">
+    WIP: {{ active_count }}/{{ wip_limit }}
+  </div>
+  {% if stale_count %}
+    <a class="stale-pill" href="{{ url_for('review') }}">{{ stale_count }} stale task{{ 's' if stale_count != 1 }} to review</a>
+  {% endif %}
+</div>
+
+<div class="board">
+  {% for status, tasks in columns.items() %}
+  <div class="column">
+    <h2>{{ status|capitalize }} <span class="count">{{ tasks|length }}</span></h2>
+    {% for t in tasks %}
+    <a class="card prio-{{ t.priority }}" href="{{ url_for('task_detail', task_id=t.id) }}">
+      <div class="card-title">{{ t.title }}</div>
+      {% if t.ctx_name %}
+        <span class="ctx-tag" style="background: {{ t.ctx_color }}">{{ t.ctx_name }}</span>
+      {% endif %}
+      {% if t.due_date %}<span class="due">due {{ t.due_date }}</span>{% endif %}
+    </a>
+    {% else %}
+    <p class="empty">nothing here</p>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

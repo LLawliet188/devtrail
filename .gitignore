@@ -1,0 +1,14 @@
+# local database - regenerate with `python seed.py`
+devtrail.db
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# editors / os
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
