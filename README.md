@@ -6,8 +6,13 @@ switching between them: coming back to a bug three days later, I would spend the
 first twenty minutes working out which branch I was on and what I had been about
 to try.
 
-DevTrail is a local, single-user web app. Nothing leaves the laptop, there is no
-account, and all data lives in one SQLite file.
+DevTrail is a single-user web app meant to run on your own machine. Nothing
+leaves the laptop, there is no account, and all data lives in one SQLite file.
+
+**Live demo: https://devtrail-fz0w.onrender.com** — loaded with sample data, on
+a free instance, so the first request after a quiet spell takes about a minute
+to wake up. It has no login (see [Deploying it](#deploying-it)), so treat it as
+a shop window rather than somewhere to keep anything.
 
 ## What makes it different from a normal to-do list
 
@@ -61,7 +66,10 @@ to the same file would only fight each other.
 | `PORT`         | `8000`               | Port to bind                          |
 
 There is a `Dockerfile`, a `render.yaml` blueprint and a `Procfile`, so most
-platforms will pick this up on their own. With Docker:
+platforms will pick this up on their own. The demo above runs on Render's free
+plan straight from `render.yaml`: point Render at this repository as a
+Blueprint and it configures the service and generates a `SECRET_KEY` itself.
+With Docker:
 
 ```bash
 docker build -t devtrail .
