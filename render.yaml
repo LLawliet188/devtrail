@@ -1,0 +1,16 @@
+# Render blueprint. Point Render at this repository and it picks this up.
+services:
+  - type: web
+    name: devtrail
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 4
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: "3.13.4"
+      # The free plan has no persistent disk, so the database lives on the
+      # container filesystem and resets whenever the service restarts. On a
+      # paid instance, attach a disk and set DEVTRAIL_DB to a path on it.

@@ -1,0 +1,10 @@
+.git
+.gitignore
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+devtrail.db
+.vscode/
+.idea/
+README.md
